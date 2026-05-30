@@ -8,11 +8,18 @@ import Feather from "@expo/vector-icons/Feather";
 import GoogleIcon from "../../assets/search.png";
 import AppleIcon from "../../assets/apple-logo.png";
 import FacebookIcon from "../../assets/communication.png";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 
 export default function Login() {
+  const navigation = useNavigation<NavigationProp<any>>();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  function logar() {
+    navigation.navigate('ButtomRoutes');
+  }
 
   return (
     <View style={styles.container}>
@@ -66,7 +73,9 @@ export default function Login() {
           <Text style={styles.forgotPassword}>Esqueci minha senha</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.buttonLogin}>
+        <TouchableOpacity style={styles.buttonLogin}
+          onPress={logar}
+        >
           <Text style={styles.textButton}>Entrar</Text>
         </TouchableOpacity>
       </View>
