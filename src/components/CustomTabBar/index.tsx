@@ -8,7 +8,7 @@ import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 
 export default function CustomTabBar({ state, navigation }: BottomTabBarProps) {
   const go = (screenName: string) => {
-    navigation.navigate(screenName)
+    navigation.navigate(screenName);
   };
 
   return (
@@ -22,14 +22,16 @@ export default function CustomTabBar({ state, navigation }: BottomTabBarProps) {
         />
       </TouchableOpacity>
 
-      <Pressable
-        style={({ pressed }) => [
-          styles.tabAdd,
-          pressed && styles.tabAddPressed,
-        ]}
-      >
-        <AntDesign name="plus" size={24} color={colors.background} />
-      </Pressable>
+      {state.index === 0 && (
+        <Pressable
+          style={({ pressed }) => [
+            styles.tabAdd,
+            pressed && styles.tabAddPressed,
+          ]}
+        >
+          <AntDesign name="plus" size={24} color={colors.background} />
+        </Pressable>
+      )}
 
       <TouchableOpacity style={styles.tabItem} onPress={() => go("User")}>
         <FontAwesome
