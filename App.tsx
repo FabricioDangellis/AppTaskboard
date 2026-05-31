@@ -1,6 +1,8 @@
 import { StatusBar } from "expo-status-bar";
 import Login from "./src/pages/Login";
 import { useFonts } from "expo-font";
+import { NavigationContainer } from "@react-navigation/native";
+import Routes from "./src/routes/index.routes";
 
 export default function App() {
   const [loaded] = useFonts({
@@ -11,8 +13,10 @@ export default function App() {
 
   return (
     <>
-      <StatusBar style="auto" />
-      <Login />
+      <NavigationContainer>
+        <StatusBar style="auto" />
+        <Routes />
+      </NavigationContainer>
     </>
   );
 }
