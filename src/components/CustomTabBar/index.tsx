@@ -6,7 +6,11 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { colors } from "../../global/colors";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 
-export default function CustomTabBar({ state, navigation }: BottomTabBarProps) {
+type Props = BottomTabBarProps & {
+  onAddTask: () => void;
+};
+
+export default function CustomTabBar({ state, navigation, onAddTask }: Props) {
   const go = (screenName: string) => {
     navigation.navigate(screenName);
   };
@@ -24,6 +28,7 @@ export default function CustomTabBar({ state, navigation }: BottomTabBarProps) {
 
       {state.index === 0 && (
         <Pressable
+          onPress={onAddTask}
           style={({ pressed }) => [
             styles.tabAdd,
             pressed && styles.tabAddPressed,

@@ -86,7 +86,7 @@ export const styles = StyleSheet.create({
     textTransform: "capitalize",
   },
   flagInactive: {
-    width: 70,
+    width: 75,
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 5,
