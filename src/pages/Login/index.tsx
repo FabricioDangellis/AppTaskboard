@@ -18,7 +18,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
 
   function logar() {
-    navigation.navigate('ButtomRoutes');
+    navigation.reset({routes: [{name: "ButtomRoutes"}]});
   }
 
   return (

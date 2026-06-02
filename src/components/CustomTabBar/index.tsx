@@ -6,9 +6,13 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { colors } from "../../global/colors";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 
-export default function CustomTabBar({ state, navigation }: BottomTabBarProps) {
+type Props = BottomTabBarProps & {
+  onAddTask: () => void;
+};
+
+export default function CustomTabBar({ state, navigation, onAddTask }: Props) {
   const go = (screenName: string) => {
-    navigation.navigate(screenName)
+    navigation.navigate(screenName);
   };
 
   return (
@@ -22,14 +26,17 @@ export default function CustomTabBar({ state, navigation }: BottomTabBarProps) {
         />
       </TouchableOpacity>
 
-      <Pressable
-        style={({ pressed }) => [
-          styles.tabAdd,
-          pressed && styles.tabAddPressed,
-        ]}
-      >
-        <AntDesign name="plus" size={24} color={colors.background} />
-      </Pressable>
+      {state.index === 0 && (
+        <Pressable
+          onPress={onAddTask}
+          style={({ pressed }) => [
+            styles.tabAdd,
+            pressed && styles.tabAddPressed,
+          ]}
+        >
+          <AntDesign name="plus" size={24} color={colors.background} />
+        </Pressable>
+      )}
 
       <TouchableOpacity style={styles.tabItem} onPress={() => go("User")}>
         <FontAwesome

@@ -7,6 +7,6 @@ export const colors = {
     shadow: "#1b1a28",
     text: '#F0C18D',
     highPriority: '#C7412C',
-    mediumPriority: '#EFED8D',
+    mediumPriority: '#e39708',
     lowPriority: '#6CCC76'
 }
