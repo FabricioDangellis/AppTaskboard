@@ -26,19 +26,21 @@ export default function CustomTabBar({ state, navigation, onAddTask }: Props) {
         />
       </TouchableOpacity>
 
-      {state.index === 0 && (
-        <Pressable
-          onPress={onAddTask}
-          style={({ pressed }) => [
-            styles.tabAdd,
-            pressed && styles.tabAddPressed,
-          ]}
-        >
-          <AntDesign name="plus" size={24} color={colors.background} />
-        </Pressable>
-      )}
+      <View style={styles.tabAddContainer}>
+        {state.index === 0 && (
+          <Pressable
+            onPress={onAddTask}
+            style={({ pressed }) => [
+              styles.tabAdd,
+              pressed && styles.tabAddPressed,
+            ]}
+          >
+            <AntDesign name="plus" size={24} color={colors.background} />
+          </Pressable>
+        )}
+      </View>
 
-      <TouchableOpacity style={styles.tabItem} onPress={() => go("User")}>
+      <TouchableOpacity style={styles.tabItem} onPress={() => go("Perfil")}>
         <FontAwesome
           name="user-o"
           size={24}
