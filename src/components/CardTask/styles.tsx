@@ -31,6 +31,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     borderLeftWidth: 5,
     borderLeftColor: "#6d6d6d",
+    opacity: 0.5,
   },
   flagIcon: {
     width: 40,
@@ -72,7 +73,7 @@ export const styles = StyleSheet.create({
     color: "#ffffff",
   },
   textInactive: {
-    textDecorationLine: 'line-through',
+    textDecorationLine: "line-through",
   },
   flag: {
     width: 75,

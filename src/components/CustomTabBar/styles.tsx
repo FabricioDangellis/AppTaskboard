@@ -22,6 +22,10 @@ export const styles = StyleSheet.create({
     shadowRadius: 9.51,
     elevation: 15,
   },
+  tabAddContainer: {
+    width: 60,
+    alignItems: "center",
+  },
   tabItem: {
     flex: 1,
     alignItems: "center",
