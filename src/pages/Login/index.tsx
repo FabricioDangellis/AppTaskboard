@@ -17,10 +17,12 @@ import AppleIcon from "../../assets/apple-logo.png";
 import FacebookIcon from "../../assets/communication.png";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { UserService } from "../../services/UserService";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Login() {
   const navigation = useNavigation<NavigationProp<any>>();
   const userService = new UserService();
+  const { setUser } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,8 +30,8 @@ export default function Login() {
 
   async function logar() {
     try {
-      await userService.login(email, password);
-
+      const user = await userService.login(email, password);
+      setUser(user);
       navigation.reset({ routes: [{ name: "ButtomRoutes" }] });
     } catch (e) {
       Alert.alert(
@@ -37,7 +39,6 @@ export default function Login() {
         e instanceof Error ? e.message : "Erro ao fazer login",
       );
     }
-
   }
 
   return (
