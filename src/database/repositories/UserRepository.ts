@@ -1,10 +1,8 @@
-import { User } from "../../@types/user";
+import { User } from "../../@types/user/user";
 import { database } from "../db";
-import bcrypt from "bcryptjs";
 
 export class UserRepository {
   async create(name: string, email: string, password: string) {
-    const hashPassword = await bcrypt.hash(password, 10);
 
     const result = await database.runAsync(
         `
@@ -12,7 +10,7 @@ export class UserRepository {
             (name, email, password)
             VALUES (?,?,?)
         `,
-        [name, email, hashPassword],
+        [name, email, password],
     );
 
     return result.lastInsertRowId;
