@@ -51,7 +51,7 @@ export default function CardTask({ task }: CardTaskProps) {
           {task.title}
         </Text>
         <Text style={[styles.description, !active && styles.textInactive]}>
-          {task.description}
+          {task.description ?? ""}
         </Text>
       </View>
 

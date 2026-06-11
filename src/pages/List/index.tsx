@@ -4,30 +4,22 @@ import Logo from "../../assets/logo.png";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 import { CardProps } from "../../@types/cardProps";
 import CardTask from "../../components/CardTask";
-import { useState } from "react";
-
-const data: Array<CardProps> = [
-  {
-    id: 0,
-    title: "Comprar pão",
-    description: "Ir na padaria da esquina",
-    flag: "urgente",
-  },
-  {
-    id: 1,
-    title: "Comprar leite",
-    description: "Ir no mercado da esquina",
-    flag: "medio",
-  },
-  {
-    id: 2,
-    title: "Comprar sabão",
-    description: "Ir no mercado da esquina",
-    flag: "baixo",
-  },
-];
+import { useEffect, useState } from "react";
+import { useAuth } from "../../context/AuthContext";
+import { TaskService } from "../../services/TaskService";
+import { useTasks } from "../../context/TaskContex";
 
 export default function List() {
+  const { user } = useAuth();
+  const { tasks, loadTasks } = useTasks();
+  const taskService = new TaskService();
+
+  useEffect(() => {
+    if(user) {
+      loadTasks(user.id);
+    }
+  }, [user]);
+
   const [filter, setFilter] = useState<"todos" | "urgente" | "medio" | "baixo">(
     "todos",
   );
@@ -39,21 +31,21 @@ export default function List() {
     concluido: 4,
   };
 
-  const sortedData = [...data].sort(
+  const sortedData = [...tasks].sort(
     (a, b) => priorityOrder[a.flag] - priorityOrder[b.flag],
   );
 
-  const filteredData =
+  const filterdData =
   filter === "todos"
     ? sortedData
-    : data.filter((task) => task.flag === filter);
+    : sortedData.filter((task) => task.flag === filter);
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerTop}>
           <View>
-            <Text style={styles.headerText}>Olá, Fabrício 👋</Text>
+            <Text style={styles.headerText}>Olá, { user?.name } 👋</Text>
             <Text style={styles.headerTitle}>Minhas Tarefas</Text>
           </View>
           <Image source={Logo} style={styles.logo} />
@@ -114,13 +106,19 @@ export default function List() {
         </View>
 
         <FlatList
-          data={filteredData}
+          data={filterdData}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => {
             return <CardTask task={item} />;
           }}
+          ListEmptyComponent={
+            <Text style={styles.emptyText}>
+              Sem tarefas cadastradas
+            </Text>
+          }
         />
       </View>
     </View>
   );
 }
+

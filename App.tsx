@@ -6,6 +6,7 @@ import Routes from "./src/routes/index.routes";
 import { useEffect } from "react";
 import { initializeDatabase } from "./src/database/migrations";
 import { AuthProvider } from "./src/context/AuthContext";
+import { TaskProvider } from "./src/context/TaskContex";
 
 export default function App() {
   const [loaded] = useFonts({
@@ -20,10 +21,12 @@ export default function App() {
 
   return (
     <AuthProvider>
-      <NavigationContainer>
-        <StatusBar style="auto" />
-        <Routes />
-      </NavigationContainer>
+      <TaskProvider>
+        <NavigationContainer>
+          <StatusBar style="auto" />
+          <Routes />
+        </NavigationContainer>
+      </TaskProvider>
     </AuthProvider>
   );
 }
