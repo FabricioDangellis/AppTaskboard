@@ -83,11 +83,10 @@ export const styles = StyleSheet.create({
     elevation: 15,
   },
   filterButton: {
-    width: '25%',
+    width: "25%",
     borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center'
-
+    alignItems: "center",
+    justifyContent: "center",
   },
   filterButtonActive: {
     backgroundColor: colors.primary,
@@ -99,5 +98,12 @@ export const styles = StyleSheet.create({
   filterTextActive: {
     color: colors.menuBackground,
     fontWeight: "600",
-  }
+  },
+  emptyText: {
+    color: "#fff",
+    textAlign: "center",
+    marginTop: 40,
+    fontSize: 16,
+    opacity: 0.7,
+  },
 });

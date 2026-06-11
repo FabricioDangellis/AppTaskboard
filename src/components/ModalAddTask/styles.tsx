@@ -100,15 +100,33 @@ export const styles = StyleSheet.create({
   },
 
   priorityHigh: {
-    backgroundColor: colors.highPriority,
+    backgroundColor: "#C7412C66",
   },
 
   priorityMedium: {
-    backgroundColor: colors.mediumPriority,
+    backgroundColor: "#e3970866",
   },
 
   priorityLow: {
-    backgroundColor: colors.lowPriority,
+    backgroundColor: "#6CCC7666",
+  },
+
+  priorityHighSelected: {
+    borderWidth: 2,
+    borderColor: "#FFF",
+    backgroundColor: colors.highPriority, 
+  },
+
+  priorityMediumSelected: {
+    borderWidth: 2,
+    borderColor: "#FFF",
+    backgroundColor: colors.mediumPriority,
+  },
+
+  priorityLowSelected: {
+    borderWidth: 2,
+    borderColor: "#FFF",
+    backgroundColor: colors.lowPriority, 
   },
 
   priorityText: {

@@ -1,24 +1,57 @@
-import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  Image,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { styles } from "./styles";
 import Logo from "../../assets/logo.png";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import { useState } from "react";
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
 import GoogleIcon from "../../assets/search.png";
 import AppleIcon from "../../assets/apple-logo.png";
 import FacebookIcon from "../../assets/communication.png";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { UserService } from "../../services/UserService";
 
 export default function Cadastro() {
   const navigation = useNavigation<NavigationProp<any>>();
+  const userService = new UserService();
 
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  function cadastrar() {}
+  async function cadastrar() {
+    try {
+      if (password !== confirmPassword) {
+        Alert.alert("As senhãs estão diferentes");
+        return;
+      }
+
+      await userService.create({
+        name,
+        email,
+        password
+      });
+
+      Alert.alert("Sucesso", "Usuário cadastrado com sucesso!");
+
+      navigation.navigate("Login");
+    } catch (e) {
+      Alert.alert(
+        "Erro",
+        e instanceof Error ? e.message : "Erro ao cadastrar usuário",
+      );
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -39,8 +72,8 @@ export default function Cadastro() {
             style={styles.textInput}
             placeholderTextColor="#c5c5c5"
             placeholder="Nome"
-            value={email}
-            onChangeText={setEmail}
+            value={name}
+            onChangeText={setName}
           />
         </View>
 
@@ -93,8 +126,8 @@ export default function Cadastro() {
             secureTextEntry={!showPassword}
             placeholderTextColor="#c5c5c5"
             placeholder="Confirme sua senha"
-            value={password}
-            onChangeText={setPassword}
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
           />
 
           <TouchableOpacity

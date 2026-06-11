@@ -1,104 +1,86 @@
-import bcrypt from "bcryptjs";
+import * as Crypto from "expo-crypto";
 import { CreateUserDTO } from "../@types/user/CreateUserDTO";
 import { UserRepository } from "../database/repositories/UserRepository";
 import { UpdateUserDTO } from "../@types/user/UpdateUserDTO";
 
 export class UserService {
-    private userRepository: UserRepository;
+  private userRepository: UserRepository;
 
-    constructor() {
-        this.userRepository = new UserRepository();
+  constructor() {
+    this.userRepository = new UserRepository();
+  }
+
+  async create({ name, email, password }: CreateUserDTO) {
+    const userExist = await this.userRepository.findByEmail(email);
+
+    if (userExist) {
+      throw new Error("Já existe um usuário cadastrado com esse email!");
     }
 
-    async create({name, email, password}: CreateUserDTO) {
-        const userExist = await this.userRepository.findByEmail(email);
-        
-        if(userExist) {
-            throw new Error (
-                "Já existe umm usuário cadastrado com esse email!"
-            );
-        }
+    const hashedPassword = await Crypto.digestStringAsync(
+      Crypto.CryptoDigestAlgorithm.SHA256,
+      password,
+    );
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+    return await this.userRepository.create(name, email, hashedPassword);
+  }
 
-        return await this.userRepository.create(
-            name,
-            email,
-            hashedPassword
-        );
+  async login(email: string, password: string) {
+    const user = await this.userRepository.findByEmail(email);
+
+    if (!user) {
+      throw new Error("Email ou senha inválidos.");
     }
 
-    async login(email:string, passsword:string) {
-        const user = await this.userRepository.findByEmail(email);
+    const hashedPassword = await Crypto.digestStringAsync(
+      Crypto.CryptoDigestAlgorithm.SHA256,
+      password,
+    );
 
-        if(!user) {
-            throw new Error (
-                "Email ou senha inválidos."
-            );
-        }
-
-        const passwordMatch = await bcrypt.compare(passsword, user.password);
-
-        if (!passwordMatch) {
-            throw new Error(
-                "Email ou senha inválidos.",
-            );
-        }
-
-        return user;
+    if (hashedPassword !== user.password) {
+      throw new Error("Email ou senha inválidos.");
     }
 
-    async findById(id: number) {
-        const user = await this.userRepository.findById(id);
+    return user;
+  }
 
-        if (!user) {
-            throw new Error(
-                "Usuário não encontrado.",
-            );
-        }
+  async findById(id: number) {
+    const user = await this.userRepository.findById(id);
 
-        return user;
+    if (!user) {
+      throw new Error("Usuário não encontrado.");
     }
 
-    async findAll() {
-        return await this.userRepository.findAll();
+    return user;
+  }
+
+  async findAll() {
+    return await this.userRepository.findAll();
+  }
+
+  async update({ id, name, email, password }: UpdateUserDTO) {
+    const user = await this.userRepository.findById(id);
+
+    if (!user) {
+      throw new Error("Usuário não encontrado.");
     }
 
-    async update({id, name, email, password}: UpdateUserDTO) {
-        const user = await this.userRepository.findById(id);
+    const emailAlreadyExists = await this.userRepository.findByEmail(email);
 
-        if (!user) {
-            throw new Error(
-                "Usuário não encontrado.",
-            );
-        }
-
-        const emailAlreadyExists = await this.userRepository.findByEmail(email);
-
-        if ( emailAlreadyExists && emailAlreadyExists.id !== id) {
-            throw new Error(
-                "Este email já está em uso."
-            );
-        }
-
-        await this.userRepository.update(
-            id,
-            name,
-            email,
-            password
-        );
+    if (emailAlreadyExists && emailAlreadyExists.id !== id) {
+      throw new Error("Este email já está em uso.");
     }
 
-    async softDelete(id: number) {
-        const user = await this.userRepository.findById(id);
+    await this.userRepository.update(id, name, email, password);
+  }
 
-        if (!user) {
-        throw new Error(
-            "Usuário não encontrado."
-        );
-        }
+  async softDelete(id: number) {
+    const user = await this.userRepository.findById(id);
 
-        await this.userRepository.softDelete(id);
+    if (!user) {
+      throw new Error("Usuário não encontrado.");
     }
-    
+
+    await this.userRepository.softDelete(id);
+  }
 }

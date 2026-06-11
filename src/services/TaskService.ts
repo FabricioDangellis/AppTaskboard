@@ -71,28 +71,11 @@ export class TaskService {
         );
     }
 
-    async complete(id: number) {
-        const task = await this.taskRepository.findById(
+    async toggleCompleted(id: number, completed: number) {
+        await this.taskRepository.complete(
             id,
+            completed,
         );
-
-        if (!task) {
-            throw new Error("Tarefa não encontrada.");
-        }
-
-        await this.taskRepository.complete(id);
-    }
-
-    async reopen(id: number) {
-        const task = await this.taskRepository.findById(
-        id,
-        );
-
-        if (!task) {
-            throw new Error("Tarefa não encontrada.");
-        }
-
-        await this.taskRepository.reopen(id);
     }
 
     async delete(id: number) {
