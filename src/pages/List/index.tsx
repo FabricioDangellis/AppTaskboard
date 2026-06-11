@@ -1,21 +1,25 @@
-import { FlatList, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { styles } from "./styles";
 import Logo from "../../assets/logo.png";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
-import { CardProps } from "../../@types/cardProps";
 import CardTask from "../../components/CardTask";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { TaskService } from "../../services/TaskService";
 import { useTasks } from "../../context/TaskContex";
 
 export default function List() {
   const { user } = useAuth();
   const { tasks, loadTasks } = useTasks();
-  const taskService = new TaskService();
 
   useEffect(() => {
-    if(user) {
+    if (user) {
       loadTasks(user.id);
     }
   }, [user]);
@@ -28,24 +32,27 @@ export default function List() {
     urgente: 1,
     medio: 2,
     baixo: 3,
-    concluido: 4,
   };
 
-  const sortedData = [...tasks].sort(
-    (a, b) => priorityOrder[a.flag] - priorityOrder[b.flag],
-  );
+  const sortedData = [...tasks].sort((a, b) => {
+    if (a.completed !== b.completed) {
+      return a.completed - b.completed;
+    }
+
+    return priorityOrder[a.flag] - priorityOrder[b.flag];
+  });
 
   const filterdData =
-  filter === "todos"
-    ? sortedData
-    : sortedData.filter((task) => task.flag === filter);
+    filter === "todos"
+      ? sortedData
+      : sortedData.filter((task) => task.flag === filter);
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerTop}>
           <View>
-            <Text style={styles.headerText}>Olá, { user?.name } 👋</Text>
+            <Text style={styles.headerText}>Olá, {user?.name} 👋</Text>
             <Text style={styles.headerTitle}>Minhas Tarefas</Text>
           </View>
           <Image source={Logo} style={styles.logo} />
@@ -71,7 +78,14 @@ export default function List() {
             ]}
             onPress={() => setFilter("todos")}
           >
-            <Text style={[styles.filterText, filter === "todos" && styles.filterTextActive]}>Todos</Text>
+            <Text
+              style={[
+                styles.filterText,
+                filter === "todos" && styles.filterTextActive,
+              ]}
+            >
+              Todos
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -81,7 +95,14 @@ export default function List() {
             ]}
             onPress={() => setFilter("urgente")}
           >
-            <Text style={[styles.filterText, filter === "urgente" && styles.filterTextActive]}>Urgentes</Text>
+            <Text
+              style={[
+                styles.filterText,
+                filter === "urgente" && styles.filterTextActive,
+              ]}
+            >
+              Urgentes
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -91,7 +112,14 @@ export default function List() {
             ]}
             onPress={() => setFilter("medio")}
           >
-            <Text style={[styles.filterText, filter === "medio" && styles.filterTextActive]}>Médias</Text>
+            <Text
+              style={[
+                styles.filterText,
+                filter === "medio" && styles.filterTextActive,
+              ]}
+            >
+              Médias
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -101,7 +129,14 @@ export default function List() {
             ]}
             onPress={() => setFilter("baixo")}
           >
-            <Text style={[styles.filterText, filter === "baixo" && styles.filterTextActive]}>Baixas</Text>
+            <Text
+              style={[
+                styles.filterText,
+                filter === "baixo" && styles.filterTextActive,
+              ]}
+            >
+              Baixas
+            </Text>
           </TouchableOpacity>
         </View>
 
@@ -112,13 +147,10 @@ export default function List() {
             return <CardTask task={item} />;
           }}
           ListEmptyComponent={
-            <Text style={styles.emptyText}>
-              Sem tarefas cadastradas
-            </Text>
+            <Text style={styles.emptyText}>Sem tarefas cadastradas</Text>
           }
         />
       </View>
     </View>
   );
 }
-

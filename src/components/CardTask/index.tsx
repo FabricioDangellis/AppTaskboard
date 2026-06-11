@@ -4,9 +4,14 @@ import { styles } from "./styles";
 import { useState } from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { useTasks } from "../../context/TaskContex";
+import { useAuth } from "../../context/AuthContext";
 
 export default function CardTask({ task }: CardTaskProps) {
-  const [active, setActive] = useState(true);
+  const active = task.completed === 0;
+
+  const { toggleCompleted } = useTasks();
+  const { user } = useAuth();
 
   function renderFlagIcon(flag: string) {
     switch (flag) {
@@ -35,10 +40,20 @@ export default function CardTask({ task }: CardTaskProps) {
         ? styles.flagYellow
         : styles.flagGreen;
 
+  async function handleToggleTask() {
+    if (!user) return;
+
+    await toggleCompleted(
+      task.id,
+      user.id,
+      task.completed === 0 ? 1 : 0,
+    );
+  }
+
   return (
     <TouchableOpacity
       style={[styles.taskCard, active ? taskStyle : styles.taskInactive]}
-      onPress={() => setActive(!active)}
+      onPress={handleToggleTask}
     >
       <View
         style={[styles.flagIcon, active ? flagStyle : styles.flagIconInactive]}

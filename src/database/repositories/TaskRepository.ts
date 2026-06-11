@@ -95,14 +95,14 @@ export class TaskRepository {
     );
   }
 
-  async complete(id: number) {
+  async complete(id: number, completed: number) {
     await database.runAsync(
-        `
-        UPDATE tasks
-        SET completed = 1
-        WHERE id = ?
-        `,
-        [id]
+      `
+      UPDATE tasks
+      SET completed = ?
+      WHERE id = ?
+      `,
+      [completed, id]
     );
   }
 
